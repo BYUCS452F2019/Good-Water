@@ -1,0 +1,45 @@
+CREATE TABLE campus(
+    CampusID INT NOT NULL AUTO_INCREMENT,
+    City varchar(255) NOT NULL,
+    State varchar(255) NOT NULL,
+    CampusName varchar(255) NOT NULL,
+    PRIMARY KEY (CampusID)
+);
+
+CREATE TABLE building (
+    BuildingID INT NOT NULL AUTO_INCREMENT,
+    BuildingName varchar(255) NOT NULL,
+    Longitude float(9,6) NOT NULL,
+    Latitude float(9,6) NOT NULL,
+    CampusID INT NOT NULL,
+    PRIMARY KEY (BuildingID),
+    FOREIGN KEY (CampusID) REFERENCES campus(CampusID)
+);
+
+CREATE TABLE fountain (
+	FountainID INT NOT NULL AUTO_INCREMENT,
+    BuildingID INT NOT NULL,
+    PRIMARY KEY (FountainID),
+    FOREIGN KEY (BuildingID) REFERENCES building(BuildingID)
+);
+
+CREATE TABLE user (
+    UserID INT NOT NULL AUTO_INCREMENT,
+    FirstName varchar(255) NOT NULL,
+    LastName varchar(255) NOT NULL,
+    Pass varchar(255) NOT NULL,
+    Email varchar(255) NOT NULL,
+    Gender boolean NOT NULL,
+    PRIMARY KEY (UserID)
+);
+
+CREATE TABLE rating (
+	RatingID INT NOT NULL AUTO_INCREMENT,
+    Score INT NOT NULL,
+    DateT DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FountainID INT NOT NULL,
+    UserID INT NOT NULL,
+    PRIMARY KEY (RatingID),
+    FOREIGN KEY (FountainID) REFERENCES fountain(FountainID),
+    FOREIGN KEY (UserID) REFERENCES user(UserID)
+);
