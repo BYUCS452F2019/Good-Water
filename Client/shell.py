@@ -1,3 +1,6 @@
+import shlex
+
+
 class Shell:
     done: bool
 
@@ -6,8 +9,9 @@ class Shell:
 
     def read_command(self, cmd: str):
         cmd = cmd.strip()
+        args = shlex.split(cmd)
 
-        if cmd == "exit":
+        if args == ["exit"]:
             self.done = True
 
     def loop(self):
