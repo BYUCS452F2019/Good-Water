@@ -1,0 +1,10 @@
+ {
+   "building":[
+      {
+         "BuildingID":"1",
+         "BuildingName":"Talmage",
+	 "Longitude": "00.0000",
+	 "Latitude": "00.0000",
+	 "CampusID": "0"
+      }
+}
