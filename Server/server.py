@@ -1,6 +1,3 @@
-import mysql.connector as mysql
-import json
-
 class Server():
     def __init__(self):
         pass
