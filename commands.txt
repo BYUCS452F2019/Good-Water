@@ -1,0 +1,10 @@
+post /users
+post /ratings
+
+What users can do:
+  Create user
+  Login
+  Create a rating 
+  Retrieve a rating
+
+Admins do everything else
