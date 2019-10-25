@@ -20,6 +20,7 @@ class Shell:
         handler_list: List[CommandHandler] = []
 
         for handler in handler_list:
+            handler.context = self.context
             self.handlers[handler.command_name.lower()] = handler
 
     def read_command(self, cmd: str):
