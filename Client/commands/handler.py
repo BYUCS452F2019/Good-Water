@@ -9,5 +9,6 @@ class CommandHandler(ABC):
     command_name: str
     context: ClientContext
 
+    @abstractmethod
     def run(self, argv: List[str]):
         pass
