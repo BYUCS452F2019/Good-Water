@@ -1,7 +1,9 @@
 import shlex
 from typing import Dict, List
 
+from communicator import Communicator
 from commands.handler import CommandHandler
+from commands.new_user import NewUserCommand
 from context import ClientContext
 
 
@@ -11,13 +13,18 @@ class Shell:
     context: ClientContext
     handlers: Dict[str, CommandHandler]
 
-    def __init__(self):
+    def __init__(self, host: str, port: int):
         self.done = False
         self.handlers = {}
-        self.context = ClientContext()
+        self.context = ClientContext(
+            communicator=Communicator(host=host, port=port),
+        )
+        self._register_handlers()
 
     def _register_handlers(self):
-        handler_list: List[CommandHandler] = []
+        handler_list: List[CommandHandler] = [
+            NewUserCommand(self.context),
+        ]
 
         for handler in handler_list:
             handler.context = self.context
@@ -37,7 +44,11 @@ class Shell:
         else:
             if cmd_name in self.handlers:
                 handler = self.handlers[cmd_name]
-                handler.run(args)
+                try:
+                    handler.run(args)
+                except Exception as ex:
+                    print(f"{type(ex).__name__} raised.")
+                    print(ex)
             else:
                 print(f"Unknown command: {cmd_name}")
 
