@@ -9,7 +9,7 @@ class NewUserCommand(CommandHandler):
         self.context = context
         self.command_name = "newuser"
         self.help_text = """
-            Usage: 'newuser email password'
+            Usage: 'newuser EMAIL PASSWORD'
             Creates a new user account.
         """
 
