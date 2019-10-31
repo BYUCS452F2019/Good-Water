@@ -8,6 +8,10 @@ class NewUserCommand(CommandHandler):
     def __init__(self, context: ClientContext):
         self.context = context
         self.command_name = "newuser"
+        self.help_text = """
+            Usage: 'newuser email password'
+            Creates a new user account.
+        """
 
     def run(self, argv: List[str]):
         if len(argv) != 3:

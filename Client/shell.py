@@ -1,4 +1,5 @@
 import shlex
+import textwrap
 from typing import Dict, List
 
 from communicator import Communicator
@@ -30,6 +31,26 @@ class Shell:
             handler.context = self.context
             self.handlers[handler.command_name.lower()] = handler
 
+    def display_help(self):
+        print("Good-Water client supports the following commands:")
+
+        for name, handler in self.handlers.items():
+            print(name)
+            help_text = textwrap.dedent(handler.help_text).strip()
+            help_text = "\n".join(
+                "\n".join(textwrap.wrap(
+                    text=t,
+                    width=100,
+                    initial_indent="    ",
+                )) for t in help_text.splitlines()
+            )
+            # help_text = "".join(textwrap.wrap(
+            #     text=help_text,
+            #     width=100,
+            #     initial_indent=" " * 4,
+            # ))
+            print(help_text)
+
     def read_command(self, cmd: str):
         cmd = cmd.strip()
 
@@ -41,6 +62,8 @@ class Shell:
 
         if cmd_name == "exit":
             self.done = True
+        elif cmd_name == "help":
+            self.display_help()
         else:
             if cmd_name in self.handlers:
                 handler = self.handlers[cmd_name]
