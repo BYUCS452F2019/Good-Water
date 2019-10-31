@@ -1,25 +1,22 @@
 import http.server
 import json
 import socketserver
+import traceback
 
+from dao.dao import DAO
+from context import ServerContext
 from routes.router import Router
 from routes.list_buildings import ListBuildingsRoute
 from routes.list_fountains import ListFountainsRoute
 
 PORT = 8080
 
-ROUTER = Router({
-    "buildings": Router({
-        "": ListBuildingsRoute(),
-        "<building_name>": Router({
-            "fountains": ListFountainsRoute(),
-        }),
-    })
-})
+router = None
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _handle(self, method):
+        global router
         content_len = self.headers.get("Content-Length", failobj=0)
 
         if content_len == 0:
@@ -27,7 +24,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             body = json.loads(self.rfile.read(content_len))
 
-        status, response = ROUTER.handle(
+        status, response = router.handle(
             path=self.path.split("/", 1)[-1],
             method=method,
             body=body,
@@ -53,11 +50,35 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 def main():
+    global router
+    dao = DAO()
+    try:
+        dao.connect_to_database()
+    except Exception as ex:
+        # TODO: get rid of this or handle more specific exception
+        # this is here just to make it easier to test dummy methods
+        traceback.print_exc()
+
+    context = ServerContext(
+        dao=dao,
+    )
+
+    router = Router({
+        "buildings": Router({
+            "": ListBuildingsRoute(context),
+            "<building_name>": Router({
+                "fountains": ListFountainsRoute(context),
+            }),
+        })
+    })
 
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("serving at port", PORT)
 
-        httpd.serve_forever()
+        try:
+            httpd.serve_forever()
+        finally:
+            dao.disconnect_from_database()
 
         # This class is responsible for making API endpoints that
         # will receive JSON objects and then call DAO methods such as "addUser"

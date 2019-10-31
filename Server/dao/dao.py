@@ -6,7 +6,7 @@ class DAO():
     def __init__(self):
         pass
 
-    def connectToDatabase(self):
+    def connect_to_database(self):
         credentials = json.load(open("dao/credentials.json"))
         self.connection = mysql.connect(
             user=credentials['username'],
@@ -15,23 +15,16 @@ class DAO():
             host=credentials['host']
         )
 
-    def disconnectFromDatabase(self):
+    def disconnect_from_database(self):
         if self.connection:
             self.connection.close()
 
-    def dropTables(self):
+    def drop_tables(self):
         statement = open("SQL_Statements/dropTables.txt").read()
         for result in self.connection.cmd_query_iter(statement):
             pass
 
-    def createTables(self):
+    def create_tables(self):
         statement = open("SQL_Statements/createTables.txt").read()
         for result in self.connection.cmd_query_iter(statement):
             pass
-
-
-dao = DAO()
-dao.connectToDatabase()
-dao.dropTables()
-dao.createTables()
-dao.disconnectFromDatabase()

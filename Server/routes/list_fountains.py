@@ -1,9 +1,15 @@
 from typing import Any, Dict, Optional, Tuple
 
+from context import ServerContext
 from routes.route import Route
 
 
 class ListFountainsRoute(Route):
+    context: ServerContext
+
+    def __init__(self, context: ServerContext):
+        self.context = context
+
     def handle(
             self,
             path: str,
@@ -17,4 +23,15 @@ class ListFountainsRoute(Route):
         building_name = params["building_name"]
         # TODO: return fountains in building named `building_name`
 
-        return 200, {"fountains": [f"{building_name}_fountain1"]}
+        return 200, {
+            "fountains": [
+                {
+                    "building": building_name,
+                    "id": "fountain1",
+                },
+                {
+                    "building": building_name,
+                    "id": "fountain2",
+                },
+            ]
+        }
