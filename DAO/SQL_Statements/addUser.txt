@@ -1,0 +1,2 @@
+INSERT INTO user (UserName, FirstName, LastName, Pass)
+VALUES (%(user_name)s, %(first_name)s, %(last_name)s, %(password)s)

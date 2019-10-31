@@ -3,7 +3,7 @@ import json
 
 class DAO():
     def __init__(self):
-        pass
+        self.connection = None
 
     def connectToDatabase(self):
         credentials = json.load(open("credentials.json"))
@@ -17,6 +17,7 @@ class DAO():
     def disconnectFromDatabase(self):
         if self.connection:
             self.connection.close()
+            self.connection = None
 
     def dropTables(self):
         statement = open("SQL_Statements/dropTables.txt").read()
@@ -28,9 +29,43 @@ class DAO():
         for result in self.connection.cmd_query_iter(statement):
             pass
 
+    def addUser(self, user_name: str, first_name: str, last_name: str, password: str):
+        if self.connection is None:
+            self.connectToDatabase()
+
+        cursor = self.connection.cursor()
+
+        add_user = open("SQL_Statements/addUser.txt").read()
+
+        user_info = {
+            'user_name': user_name,
+            'first_name': first_name,
+            'last_name': last_name,
+            'password': password
+        }
+
+        cursor.execute(add_user, user_info)
+        self.connection.commit()
+        cursor.close()
+        self.connection.close()
+
+
+    def addRating(self):
+        pass
+
+    def addFountain(self):
+        pass
+
+    def addBuilding(self):
+        pass
+
+    def addCampus(self):
+        pass
+
 
 dao = DAO()
 dao.connectToDatabase()
 dao.dropTables()
 dao.createTables()
+dao.addUser('paj', 'Paul', 'Johnston', '123')
 dao.disconnectFromDatabase()
