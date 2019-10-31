@@ -1,2 +1,2 @@
 INSERT INTO building (BuildingName, Latitude, Longitude, CampusID)
-VALUES (%(building_name)s, %(latitude)d, %(longitude)d, %(campus_id)d)
+VALUES (%(building_name)s, %(latitude)s, %(longitude)s, %(campus_id)s)

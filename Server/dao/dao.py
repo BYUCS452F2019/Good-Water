@@ -8,7 +8,7 @@ class DAO():
         self.connection = None
 
     def connect_to_database(self):
-        credentials = json.load(open("dao/credentials.json"))
+        credentials = json.load(open("./credentials.json"))
         self.connection = mysql.connect(
             user=credentials['username'],
             password=credentials['password'],
@@ -111,10 +111,10 @@ dao.create_tables()
 dao.add_user('paj', 'Paul', 'Johnston', '123')
 dao.add_campus('Provo', 'Utah', 'BYU-Provo')
 
-myDF = pd.read_csv("Building_Coordinates.csv", sep=',')
+myDF = pd.read_csv("../Building_Coordinates.csv", sep=',')
 # print(myDF)
 
 for i in range(0, len(myDF.index)):
-    dao.addBuilding(myDF['Name'][i], myDF['Latitude'][i], myDF['Longitude'][i], 0)
+    dao.add_building(myDF['Name'][i], float(myDF['Latitude'][i]), float(myDF['Longitude'][i]), 1)
 
 dao.disconnect_from_database()
