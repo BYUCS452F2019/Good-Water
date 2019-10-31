@@ -1,12 +1,13 @@
 import mysql.connector as mysql
 import json
 
+
 class DAO():
     def __init__(self):
         pass
 
     def connectToDatabase(self):
-        credentials = json.load(open("credentials.json"))
+        credentials = json.load(open("dao/credentials.json"))
         self.connection = mysql.connect(
             user=credentials['username'],
             password=credentials['password'],
