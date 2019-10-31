@@ -1,7 +1,19 @@
-from typing import List
+from typing import Any, Dict, List
 
 from commands.handler import CommandHandler
 from context import ClientContext
+
+
+def print_buildings(data: List[Dict[str, Any]]):
+    for building in data:
+        name = building["name"]
+        lat = building["latitude"]
+        lon = building["longitude"]
+        ns = "N" if lat >= 0 else "S"
+        ew = "E" if lon >= 0 else "W"
+        print(f"name: {name}")
+        print(f"{abs(lat)}\u00b0{ns} {abs(lon)}\u00b0{ew}")
+        print()
 
 
 class ListBuildingsCommand(CommandHandler):
@@ -24,7 +36,6 @@ class ListBuildingsCommand(CommandHandler):
         )
 
         if 200 <= status < 300:
-            # TODO: properly format buildings
-            print(data)
+            print_buildings(data["buildings"])
         else:
-            print("Failed to retrieve buildings.")
+            print(f"Failed to retrieve buildings: {data['error']}")

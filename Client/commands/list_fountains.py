@@ -1,7 +1,16 @@
-from typing import List
+from typing import Any, Dict, List
 
 from commands.handler import CommandHandler
 from context import ClientContext
+
+
+def print_fountains(data: List[Dict[str, Any]]):
+    for fountain in data:
+        building_name = fountain["building"]
+        fountain_id = fountain["id"]
+        print(f"building: {building_name}")
+        print(f"id: {fountain_id}")
+        print()
 
 
 class ListFountainsCommand(CommandHandler):
@@ -26,7 +35,6 @@ class ListFountainsCommand(CommandHandler):
         )
 
         if 200 <= status < 300:
-            # TODO: properly format fountains
-            print(data)
+            print_fountains(data["fountains"])
         else:
-            print("Failed to retrieve fountains.")
+            print(f"Failed to retrieve fountains: {data['error']}.")

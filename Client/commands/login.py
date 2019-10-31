@@ -5,13 +5,13 @@ from communicator import Credentials
 from context import ClientContext
 
 
-class NewUserCommand(CommandHandler):
+class LoginCommand(CommandHandler):
     def __init__(self, context: ClientContext):
         self.context = context
-        self.command_name = "newuser"
+        self.command_name = "login"
         self.help_text = """
-            Usage: 'newuser EMAIL PASSWORD'
-            Creates a new user account.
+            Usage: 'login EMAIL PASSWORD'
+            Signs the user in.
         """
 
     def run(self, argv: List[str]):
@@ -20,20 +20,6 @@ class NewUserCommand(CommandHandler):
             return
 
         email, password = argv[1:3]
-        status, data = self.context.communicator.send_request(
-            path="/users",
-            method="POST",
-            data={
-                "email": email,
-                "password": password,
-            },
-        )
-
-        if not 200 <= status < 300:
-            print("User creation failed.")
-            return
-
-        print("User successfully created. Signing in...")
         self.context.communicator.creds = Credentials(email, password)
 
         if self.context.communicator.authenticate():

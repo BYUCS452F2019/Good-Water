@@ -1,12 +1,13 @@
 import mysql.connector as mysql
 import json
 
+
 class DAO():
     def __init__(self):
         self.connection = None
 
-    def connectToDatabase(self):
-        credentials = json.load(open("credentials.json"))
+    def connect_to_database(self):
+        credentials = json.load(open("dao/credentials.json"))
         self.connection = mysql.connect(
             user=credentials['username'],
             password=credentials['password'],
@@ -14,17 +15,17 @@ class DAO():
             host=credentials['host']
         )
 
-    def disconnectFromDatabase(self):
+    def disconnect_from_database(self):
         if self.connection:
             self.connection.close()
             self.connection = None
 
-    def dropTables(self):
+    def drop_tables(self):
         statement = open("SQL_Statements/dropTables.txt").read()
         for result in self.connection.cmd_query_iter(statement):
             pass
 
-    def createTables(self):
+    def create_tables(self):
         statement = open("SQL_Statements/createTables.txt").read()
         for result in self.connection.cmd_query_iter(statement):
             pass
