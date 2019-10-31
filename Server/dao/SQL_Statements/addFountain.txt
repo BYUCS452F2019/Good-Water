@@ -1,2 +1,2 @@
 INSERT INTO fountain (BuildingID, FountainName)
-VALUES (%(building_id)d, %(fountain_name)s)
+VALUES (%(building_id)s, %(fountain_name)s)

@@ -1,2 +1,2 @@
 INSERT INTO rating (Score, DateT, FountainID, UserID)
-VALUES (%(score)d, %(dateT)s, %(fountain_id)d, %(user_id)d)
+VALUES (%(score)s, %(dateT)s, %(fountain_id)s, %(user_id)s)
