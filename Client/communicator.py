@@ -47,7 +47,6 @@ class Communicator:
             conn.request(method, path, **params)
             res = conn.getresponse()
             response_data = res.read()
-            print(response_data)
             return res.status, json.loads(response_data)
         finally:
             conn.close()
