@@ -1,10 +1,15 @@
 {
-   "building":[
+   "User":[
       {
-         "BuildingID":"1",
-         "BuildingName":"Talmage",
-	 "Longitude": "00.0000",
-	 "Latitude": "00.0000",
-	 "CampusID": "0"
+         "FirstName":"1",
+         "LastName":"Talmage",
+	 "Password": "00.0000",
+	 "Email": "00.0000",
+	 "Gender": "llama"
       }
 }
+
+
+
+Paul here is a new User(FirstName, LastName, Password, Email, Gender
+Frank wants to make a new account, do it Paul
