@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional, Tuple
 
 from context import ServerContext
-from routes.route import Route
+from routes.route import Route, UNAUTHORIZED_RESPONSE
 
 
 class RatingsRoute(Route):
@@ -26,7 +26,13 @@ class RatingsRoute(Route):
             building_name: str,
             fountain_id: str,
             rating: Dict[str, Any],
+            token: Optional[str],
     ) -> Tuple[int, Dict[str, Any]]:
+        user_id = self.context.authenticator.lookup_token(token)
+
+        if user_id is None:
+            return UNAUTHORIZED_RESPONSE
+
         value = rating["value"]
 
         if not 0.0 <= value <= 5.0:
@@ -61,6 +67,7 @@ class RatingsRoute(Route):
                 building_name=building_name,
                 fountain_id=fountain_id,
                 rating=body["rating"],
+                token=params["auth_token"],
             )
         else:
             return 400, {"error": "invalid method"}

@@ -8,8 +8,10 @@ from dao.dao import DAO
 from context import ServerContext
 from routes.list_buildings import ListBuildingsRoute
 from routes.list_fountains import ListFountainsRoute
+from routes.login import LoginRoute
 from routes.ratings import RatingsRoute
 from routes.router import Router
+from routes.users import UsersRoute
 
 PORT = 8080
 
@@ -26,12 +28,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             body = json.loads(self.rfile.read(content_len))
 
+        auth_token = self.headers.get("Auth-Token", failobj=None)
+
+        params = {
+            "auth_token": auth_token
+        }
+
         try:
             status, response = router.handle(
                 path=self.path.split("/", 1)[-1],
                 method=method,
                 body=body,
-                params={},
+                params=params,
             )
         except Exception as ex:
             traceback.print_exc()
@@ -89,6 +97,8 @@ def main():
                 }),
             }),
         }),
+        "login": LoginRoute(context),
+        "users": UsersRoute(context),
     })
 
     with socketserver.TCPServer(("", PORT), Handler) as httpd:

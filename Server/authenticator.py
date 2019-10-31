@@ -18,15 +18,15 @@ class Authenticator:
         # this should also look up the user ID
         # for now this just uses "abc" for the user ID
         user_id = "abc"
-        token = f"{random.randint(0xFFFFFFFFFFFFFFFF):016x}"
+        token = f"{random.randint(0, 0xFFFFFFFFFFFFFFFF):016x}"
 
         while token in self.token_map:
-            token = f"{random.randint(0xFFFFFFFFFFFFFFFF):016x}"
+            token = f"{random.randint(0, 0xFFFFFFFFFFFFFFFF):016x}"
 
         self.token_map[token] = user_id
         return token
 
-    def lookup_token(self, token: str) -> Optional[str]:
+    def lookup_token(self, token: Optional[str]) -> Optional[str]:
         if token in self.token_map:
             return self.token_map[token]
         else:

@@ -4,7 +4,7 @@ from context import ServerContext
 from routes.route import Route
 
 
-class ListFountainsRoute(Route):
+class UsersRoute(Route):
     context: ServerContext
 
     def __init__(self, context: ServerContext):
@@ -17,21 +17,15 @@ class ListFountainsRoute(Route):
             body: Optional[Dict[str, Any]],
             params: Dict[str, str],
     ) -> Tuple[int, Dict[str, Any]]:
-        if method != "GET":
+        if method != "POST":
             return 400, {"error": "invalid method"}
 
-        building_name = params["building_name"].upper()
-        # TODO: return fountains in building named `building_name`
+        email = body["email"]
+        password = body["password"]
+
+        # TODO: use the DAO to actually create a new user if possible
+        user_id = "123"
 
         return 200, {
-            "fountains": [
-                {
-                    "building": building_name,
-                    "id": "fountain1",
-                },
-                {
-                    "building": building_name,
-                    "id": "fountain2",
-                },
-            ],
+            "user_id": user_id,
         }
