@@ -50,7 +50,7 @@ class Router(Route):
             route = self.param_route
             params[self.param_name] = current
         else:
-            return 404, {}
+            return 404, {"error": "Not found"}
 
         return route.handle(
             path=remaining,

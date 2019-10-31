@@ -12,19 +12,16 @@ class RatingsRoute(Route):
 
     def get_rating(
             self,
-            building_name: str,
-            fountain_id: str,
+            fountain_name: str,
     ) -> Tuple[int, Dict[str, Any]]:
         return 200, {
-            "building": building_name,
-            "fountain": fountain_id,
+            "fountain": fountain_name,
             "averageValue": 3.5,
         }
 
     def create_rating(
             self,
-            building_name: str,
-            fountain_id: str,
+            fountain_name: str,
             rating: Dict[str, Any],
             token: Optional[str],
     ) -> Tuple[int, Dict[str, Any]]:
@@ -40,10 +37,9 @@ class RatingsRoute(Route):
                 "error": f"Invalid rating {value}",
             }
 
-        print(
-            f"Adding rating {value} to fountain"
-            f" {fountain_id} in {building_name}"
-        )
+        print(f"Adding rating {value} to fountain {fountain_name}")
+
+        # TODO: add the rating
 
         return 200, {}
 
@@ -54,18 +50,15 @@ class RatingsRoute(Route):
             body: Optional[Dict[str, Any]],
             params: Dict[str, str],
     ) -> Tuple[int, Dict[str, Any]]:
-        building_name = params["building_name"].upper()
-        fountain_id = params["fountain_id"]
+        fountain_name = params["fountain_name"]
 
         if method == "GET":
             return self.get_rating(
-                building_name=building_name,
-                fountain_id=fountain_id,
+                fountain_name=fountain_name,
             )
         elif method == "POST":
             return self.create_rating(
-                building_name=building_name,
-                fountain_id=fountain_id,
+                fountain_name=fountain_name,
                 rating=body["rating"],
                 token=params["auth_token"],
             )
