@@ -1,6 +1,7 @@
 from typing import List
 
 from commands.handler import CommandHandler
+from communicator import Credentials
 from context import ClientContext
 
 
@@ -28,7 +29,14 @@ class NewUserCommand(CommandHandler):
             },
         )
 
-        if 200 <= status < 300:
-            print("User successfully created.")
-        else:
+        if not 200 <= status < 300:
             print("User creation failed.")
+            return
+
+        print("User successfully created. Signing in...")
+        self.context.communicator.creds = Credentials(email, password)
+
+        if self.context.communicator.authenticate():
+            print("User signed in.")
+        else:
+            print("User failed to sign in.")
