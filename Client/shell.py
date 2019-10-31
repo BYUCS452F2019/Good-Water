@@ -1,5 +1,6 @@
 import shlex
 import textwrap
+import traceback
 from typing import Dict, List
 
 from communicator import Communicator
@@ -34,21 +35,23 @@ class Shell:
     def display_help(self):
         print("Good-Water client supports the following commands:")
 
-        for name, handler in self.handlers.items():
+        msgs = [(n, h.help_text) for n, h in self.handlers.items()]
+        msgs += [
+            ("help", "Displays this help message."),
+            ("exit", "Terminates the client."),
+        ]
+        msgs.sort()
+
+        for name, help_text in msgs:
             print(name)
-            help_text = textwrap.dedent(handler.help_text).strip()
+            text = textwrap.dedent(help_text).strip()
             help_text = "\n".join(
                 "\n".join(textwrap.wrap(
                     text=t,
                     width=100,
-                    initial_indent="    ",
-                )) for t in help_text.splitlines()
+                    initial_indent=" " * 4,
+                )) for t in text.splitlines()
             )
-            # help_text = "".join(textwrap.wrap(
-            #     text=help_text,
-            #     width=100,
-            #     initial_indent=" " * 4,
-            # ))
             print(help_text)
 
     def read_command(self, cmd: str):
@@ -70,8 +73,11 @@ class Shell:
                 try:
                     handler.run(args)
                 except Exception as ex:
-                    print(f"{type(ex).__name__} raised.")
-                    print(ex)
+                    print(
+                        f"{type(ex).__name__} raised"
+                        f" during '{cmd_name}' command."
+                    )
+                    traceback.print_exc()
             else:
                 print(f"Unknown command: {cmd_name}")
 
