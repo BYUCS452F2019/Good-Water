@@ -20,7 +20,7 @@ class ListFountainsRoute(Route):
         if method != "GET":
             return 400, {"error": "invalid method"}
 
-        building_name = params["building_name"]
+        building_name = params["building_name"].upper()
         # TODO: return fountains in building named `building_name`
 
         return 200, {

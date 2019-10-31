@@ -25,12 +25,12 @@ class ListBuildingsRoute(Route):
                 {
                     "name": "JFSB",
                     "latitude": 1,
-                    "latitude": 2,
+                    "longitude": 2,
                 },
                 {
                     "name": "TMCB",
                     "latitude": 3,
-                    "latitude": 4,
+                    "longitude": 4,
                 },
             ],
         }
