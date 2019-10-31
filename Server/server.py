@@ -5,9 +5,10 @@ import traceback
 
 from dao.dao import DAO
 from context import ServerContext
-from routes.router import Router
 from routes.list_buildings import ListBuildingsRoute
 from routes.list_fountains import ListFountainsRoute
+from routes.ratings import RatingsRoute
+from routes.router import Router
 
 PORT = 8080
 
@@ -17,19 +18,26 @@ router = None
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _handle(self, method):
         global router
-        content_len = self.headers.get("Content-Length", failobj=0)
+        content_len = int(self.headers.get("Content-Length", failobj="0"))
 
         if content_len == 0:
             body = None
         else:
             body = json.loads(self.rfile.read(content_len))
 
-        status, response = router.handle(
-            path=self.path.split("/", 1)[-1],
-            method=method,
-            body=body,
-            params={},
-        )
+        try:
+            status, response = router.handle(
+                path=self.path.split("/", 1)[-1],
+                method=method,
+                body=body,
+                params={},
+            )
+        except Exception as ex:
+            traceback.print_exc()
+            trace = traceback.format_exc()
+            status, response = 500, {
+                "error": trace,
+            }
 
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
@@ -67,9 +75,14 @@ def main():
         "buildings": Router({
             "": ListBuildingsRoute(context),
             "<building_name>": Router({
-                "fountains": ListFountainsRoute(context),
+                "fountains": Router({
+                    "": ListBuildingsRoute(context),
+                    "<fountain_id>": Router({
+                        "ratings": RatingsRoute(context),
+                    }),
+                }),
             }),
-        })
+        }),
     })
 
     with socketserver.TCPServer(("", PORT), Handler) as httpd:

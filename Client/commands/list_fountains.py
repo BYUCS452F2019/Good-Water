@@ -37,4 +37,4 @@ class ListFountainsCommand(CommandHandler):
         if 200 <= status < 300:
             print_fountains(data["fountains"])
         else:
-            print("Failed to retrieve fountains.")
+            print(f"Failed to retrieve fountains: {data['error']}.")

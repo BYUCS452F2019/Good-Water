@@ -38,4 +38,4 @@ class ListBuildingsCommand(CommandHandler):
         if 200 <= status < 300:
             print_buildings(data["buildings"])
         else:
-            print("Failed to retrieve buildings.")
+            print(f"Failed to retrieve buildings: {data['error']}")

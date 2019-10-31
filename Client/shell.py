@@ -4,10 +4,12 @@ import traceback
 from typing import Dict, List
 
 from communicator import Communicator
+from commands.get_rating import GetRatingCommand
 from commands.handler import CommandHandler
 from commands.list_buildings import ListBuildingsCommand
 from commands.list_fountains import ListFountainsCommand
 from commands.new_user import NewUserCommand
+from commands.rate_fountain import RateFountainCommand
 from context import ClientContext
 
 
@@ -27,9 +29,11 @@ class Shell:
 
     def _register_handlers(self):
         handler_list: List[CommandHandler] = [
+            GetRatingCommand(self.context),
             ListBuildingsCommand(self.context),
             ListFountainsCommand(self.context),
             NewUserCommand(self.context),
+            RateFountainCommand(self.context),
         ]
 
         for handler in handler_list:
