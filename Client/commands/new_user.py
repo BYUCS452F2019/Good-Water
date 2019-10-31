@@ -10,7 +10,7 @@ class NewUserCommand(CommandHandler):
         self.context = context
         self.command_name = "newuser"
         self.help_text = """
-            Usage: 'newuser EMAIL PASSWORD'
+            Usage: 'newuser USERNAME PASSWORD'
             Creates a new user account.
         """
 
@@ -19,12 +19,12 @@ class NewUserCommand(CommandHandler):
             print(f"{self.command_name} should have 2 arguments.")
             return
 
-        email, password = argv[1:3]
+        username, password = argv[1:3]
         status, data = self.context.communicator.send_request(
             path="/users",
             method="POST",
             data={
-                "email": email,
+                "username": username,
                 "password": password,
             },
         )
@@ -34,7 +34,7 @@ class NewUserCommand(CommandHandler):
             return
 
         print("User successfully created. Signing in...")
-        self.context.communicator.creds = Credentials(email, password)
+        self.context.communicator.creds = Credentials(username, password)
 
         if self.context.communicator.authenticate():
             print("User signed in.")

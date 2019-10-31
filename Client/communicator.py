@@ -4,7 +4,7 @@ from typing import NamedTuple, Optional, Tuple
 
 
 class Credentials(NamedTuple):
-    email: str
+    username: str
     password: str
 
 
@@ -36,7 +36,7 @@ class Communicator:
             path=AUTH_PATH,
             method="POST",
             data={
-                "email": self.creds.email,
+                "username": self.creds.username,
                 "password": self.creds.password,
             },
             retry_auth=False,
