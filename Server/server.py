@@ -3,6 +3,7 @@ import json
 import socketserver
 import traceback
 
+from authenticator import Authenticator
 from dao.dao import DAO
 from context import ServerContext
 from routes.list_buildings import ListBuildingsRoute
@@ -60,6 +61,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 def main():
     global router
     dao = DAO()
+    authenticator = Authenticator(
+        dao=dao,
+    )
+
     try:
         dao.connect_to_database()
     except Exception as ex:
@@ -68,6 +73,7 @@ def main():
         traceback.print_exc()
 
     context = ServerContext(
+        authenticator=authenticator,
         dao=dao,
     )
 
