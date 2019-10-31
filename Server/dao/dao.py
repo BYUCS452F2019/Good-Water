@@ -7,7 +7,7 @@ class DAO():
         self.connection = None
 
     def connect_to_database(self):
-        credentials = json.load(open("./credentials.json"))
+        credentials = json.load(open("./dao/credentials.json"))
         self.connection = mysql.connect(
             user=credentials['username'],
             password=credentials['password'],
@@ -31,11 +31,7 @@ class DAO():
             pass
 
     def add_user(self, user_name: str, first_name: str, last_name: str, password: str):
-        if self.connection is None:
-            self.connectToDatabase()
-
         cursor = self.connection.cursor()
-
         add_user = open("SQL_Statements/addUser.txt").read()
 
         user_info = {
@@ -48,20 +44,63 @@ class DAO():
         cursor.execute(add_user, user_info)
         self.connection.commit()
         cursor.close()
-        self.connection.close()
 
+    def add_rating(self, score: int, dateT: str, fountain_id: int, user_id: int):
+        cursor = self.connection.cursor()
+        add_rating = open("SQL_Statements/addRating.txt").read()
 
-    def add_rating(self):
-        pass
+        rating_info = {
+            'score': score,
+            'dateT': dateT,
+            'fountain_id': fountain_id,
+            'user_id': user_id
+        }
 
-    def add_fountain(self):
-        pass
+        cursor.execute(add_rating, rating_info)
+        self.connection.commit()
+        cursor.close()
 
-    def add_building(self):
-        pass
+    def add_fountain(self, building_id: str, fountain_name: str):
+        cursor = self.connection.cursor()
+        add_fountain = open("SQL_Statements/addFountain.txt").read()
 
-    def add_campus(self):
-        pass
+        fountain_info = {
+            'building_id': building_id,
+            'fountain_name': fountain_name
+        }
+
+        cursor.execute(add_fountain, fountain_info)
+        self.connection.commit()
+        cursor.close()
+
+    def add_building(self, building_name: str, latitude: float, longitude: float, campus_id: int):
+        cursor = self.connection.cursor()
+        add_building = open("SQL_Statements/addBuilding.txt").read()
+
+        building_info = {
+            'building_name': building_name,
+            'latitude': latitude,
+            'longitude': longitude,
+            'campus_id': campus_id
+        }
+
+        cursor.execute(add_building, building_info)
+        self.connection.commit()
+        cursor.close()
+
+    def add_campus(self, city: str, state: str, campus_name: str):
+        cursor = self.connection.cursor()
+        add_campus = open("SQL_Statements/addCampus.txt").read()
+
+        campus_info = {
+            'city': city,
+            'state': state,
+            'campus_name': campus_name
+        }
+
+        cursor.execute(add_campus, campus_info)
+        self.connection.commit()
+        cursor.close()
 
 
 dao = DAO()
@@ -69,4 +108,5 @@ dao.connect_to_database()
 dao.drop_tables()
 dao.create_tables()
 dao.add_user('paj', 'Paul', 'Johnston', '123')
+dao.add_campus('Provo', 'Utah', 'BYU-Provo')
 dao.disconnect_from_database()

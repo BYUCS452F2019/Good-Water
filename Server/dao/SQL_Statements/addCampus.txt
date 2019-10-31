@@ -1,0 +1,2 @@
+INSERT INTO campus (City, State, CampusName)
+VALUES (%(city)s, %(state)s, %(campus_name)s)
