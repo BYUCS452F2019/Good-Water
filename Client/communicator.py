@@ -81,7 +81,17 @@ class Communicator:
             if data is not None:
                 params["body"] = json.dumps(data)
 
-            conn.request(method, path, **params)
+            headers = {}
+
+            if self.token is not None:
+                headers["Auth-Token"] = self.token
+
+            conn.request(
+                method=method,
+                url=path,
+                headers=headers,
+                **params,
+            )
             res = conn.getresponse()
             response_data = res.read()
 
