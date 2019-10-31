@@ -9,20 +9,19 @@ class GetRatingCommand(CommandHandler):
         self.context = context
         self.command_name = "getrating"
         self.help_text = """
-            Usage: 'getrating BUILDING FOUNTAIN'
+            Usage: 'getrating FOUNTAIN'
             Gets the average rating for a fountain.
         """
 
     def run(self, argv: List[str]):
-        if len(argv) != 3:
-            print(f"{self.command_name} should have 2 arguments.")
+        if len(argv) != 2:
+            print(f"{self.command_name} should have 1 arguments.")
             return
 
-        building_name = argv[1]
-        fountain_id = argv[2]
+        fountain_id = argv[1]
 
         status, data = self.context.communicator.send_request(
-            path=f"/buildings/{building_name}/fountains/{fountain_id}/ratings",
+            path=f"fountains/{fountain_id}/ratings",
             method="GET",
         )
 

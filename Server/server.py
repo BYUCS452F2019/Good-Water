@@ -34,9 +34,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             "auth_token": auth_token
         }
 
+        path = self.path
+
+        if path[0] == "/":
+            path = path[1:]
+
         try:
             status, response = router.handle(
-                path=self.path.split("/", 1)[-1],
+                path=path,
                 method=method,
                 body=body,
                 params=params,
@@ -89,12 +94,12 @@ def main():
         "buildings": Router({
             "": ListBuildingsRoute(context),
             "<building_name>": Router({
-                "fountains": Router({
-                    "": ListBuildingsRoute(context),
-                    "<fountain_id>": Router({
-                        "ratings": RatingsRoute(context),
-                    }),
-                }),
+                "fountains": ListFountainsRoute(context),
+            }),
+        }),
+        "fountains": Router({
+            "<fountain_name>": Router({
+                "ratings": RatingsRoute(context),
             }),
         }),
         "login": LoginRoute(context),

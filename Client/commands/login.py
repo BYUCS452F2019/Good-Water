@@ -10,7 +10,7 @@ class LoginCommand(CommandHandler):
         self.context = context
         self.command_name = "login"
         self.help_text = """
-            Usage: 'login EMAIL PASSWORD'
+            Usage: 'login USERNAME PASSWORD'
             Signs the user in.
         """
 
@@ -19,8 +19,8 @@ class LoginCommand(CommandHandler):
             print(f"{self.command_name} should have 2 arguments.")
             return
 
-        email, password = argv[1:3]
-        self.context.communicator.creds = Credentials(email, password)
+        username, password = argv[1:3]
+        self.context.communicator.creds = Credentials(username, password)
 
         if self.context.communicator.authenticate():
             print("User signed in.")

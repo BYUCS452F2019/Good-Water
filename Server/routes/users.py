@@ -20,7 +20,7 @@ class UsersRoute(Route):
         if method != "POST":
             return 400, {"error": "invalid method"}
 
-        email = body["email"]
+        username = body["username"]
         password = body["password"]
 
         # TODO: use the DAO to actually create a new user if possible
