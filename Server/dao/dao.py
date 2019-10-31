@@ -7,7 +7,7 @@ class DAO():
         self.connection = None
 
     def connect_to_database(self):
-        credentials = json.load(open("./dao/credentials.json"))
+        credentials = json.load(open("dao/credentials.json"))
         self.connection = mysql.connect(
             user=credentials['username'],
             password=credentials['password'],
