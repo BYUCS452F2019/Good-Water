@@ -7,7 +7,7 @@ class DAO():
         self.connection = None
 
     def connect_to_database(self):
-        credentials = json.load(open("dao/credentials.json"))
+        credentials = json.load(open("./credentials.json"))
         self.connection = mysql.connect(
             user=credentials['username'],
             password=credentials['password'],
@@ -30,7 +30,7 @@ class DAO():
         for result in self.connection.cmd_query_iter(statement):
             pass
 
-    def addUser(self, user_name: str, first_name: str, last_name: str, password: str):
+    def add_user(self, user_name: str, first_name: str, last_name: str, password: str):
         if self.connection is None:
             self.connectToDatabase()
 
@@ -51,22 +51,22 @@ class DAO():
         self.connection.close()
 
 
-    def addRating(self):
+    def add_rating(self):
         pass
 
-    def addFountain(self):
+    def add_fountain(self):
         pass
 
-    def addBuilding(self):
+    def add_building(self):
         pass
 
-    def addCampus(self):
+    def add_campus(self):
         pass
 
 
 dao = DAO()
-dao.connectToDatabase()
-dao.dropTables()
-dao.createTables()
-dao.addUser('paj', 'Paul', 'Johnston', '123')
-dao.disconnectFromDatabase()
+dao.connect_to_database()
+dao.drop_tables()
+dao.create_tables()
+dao.add_user('paj', 'Paul', 'Johnston', '123')
+dao.disconnect_from_database()
