@@ -21,7 +21,7 @@ class LoginRoute(Route):
             return 400, {"error": "invalid method"}
 
         token = self.context.authenticator.create_token(
-            body["email"],
+            body["username"],
             body["password"],
         )
 
