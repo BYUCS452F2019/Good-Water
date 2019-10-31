@@ -1,5 +1,6 @@
 import mysql.connector as mysql
 import json
+import pandas as pd
 
 
 class DAO():
@@ -109,4 +110,11 @@ dao.drop_tables()
 dao.create_tables()
 dao.add_user('paj', 'Paul', 'Johnston', '123')
 dao.add_campus('Provo', 'Utah', 'BYU-Provo')
+
+myDF = pd.read_csv("Building_Coordinates.csv", sep=',')
+# print(myDF)
+
+for i in range(0, len(myDF.index)):
+    dao.addBuilding(myDF['Name'][i], myDF['Latitude'][i], myDF['Longitude'][i], 0)
+
 dao.disconnect_from_database()
