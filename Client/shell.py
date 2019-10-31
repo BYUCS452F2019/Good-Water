@@ -87,5 +87,8 @@ class Shell:
 
     def loop(self):
         """Handle user input until the program ends."""
+        print("Welcome to the Good-Water client!")
+        print("Type 'help' for usage information.")
+
         while not self.done:
             self.read_command(input("> "))
