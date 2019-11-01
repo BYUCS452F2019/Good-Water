@@ -69,7 +69,6 @@ class DAO():
             'building_id': building_id,
             'fountain_name': fountain_name
         }
-
         cursor.execute(add_fountain, fountain_info)
         self.connection.commit()
         cursor.close()
@@ -104,17 +103,29 @@ class DAO():
         cursor.close()
 
 
-dao = DAO()
-dao.connect_to_database()
-dao.drop_tables()
-dao.create_tables()
-dao.add_user('paj', 'Paul', 'Johnston', '123')
-dao.add_campus('Provo', 'Utah', 'BYU-Provo')
+def load_server():
+    dao = DAO()
+    dao.connect_to_database()
+    dao.drop_tables()
+    dao.create_tables()
+    dao.add_user('paj', 'Paul', 'Johnston', '123')
+    dao.add_campus('Provo', 'Utah', 'BYU-Provo')
 
-myDF = pd.read_csv("../Building_Coordinates.csv", sep=',')
-# print(myDF)
+    myDF = pd.read_csv("../Building_Coordinates.csv", sep=',')
 
-for i in range(0, len(myDF.index)):
-    dao.add_building(myDF['Name'][i], float(myDF['Latitude'][i]), float(myDF['Longitude'][i]), 1)
+    for i in range(0, len(myDF.index)):
+        dao.add_building(myDF['Name'][i], float(myDF['Latitude'][i]), float(myDF['Longitude'][i]), 1)
 
-dao.disconnect_from_database()
+    fountainData = pd.read_csv("../FountainInput.csv", sep=',')
+    for i in range(0, len(fountainData.index)):
+        dao.add_fountain(str(fountainData['Building_ID'][i]), str(fountainData['Fountain_Name'][i]))
+
+    ratingData = pd.read_csv("../ratingInput.csv", sep=',')
+    for i in range(0, len(ratingData.index)):
+        dao.add_rating(int(ratingData['Score'][i]), str(ratingData['Date'][i]), int(ratingData['Fountain_ID'][i]), int(ratingData['User_ID'][i]) )
+
+
+    dao.disconnect_from_database()
+
+# HERE'S WHERE YOU CAN CALL LOAD_SERVER TO FILL DATABASE
+load_server()
