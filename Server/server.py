@@ -2,6 +2,7 @@ import http.server
 import json
 import socketserver
 import traceback
+import urllib.parse
 
 from authenticator import Authenticator
 from dao.dao import DAO
@@ -34,7 +35,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             "auth_token": auth_token
         }
 
-        path = self.path
+        path = urllib.parse.unquote(self.path)
 
         if path[0] == "/":
             path = path[1:]

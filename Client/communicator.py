@@ -1,4 +1,5 @@
 import json
+import urllib.parse
 from http.client import HTTPConnection
 from typing import NamedTuple, Optional, Tuple
 
@@ -71,6 +72,8 @@ class Communicator:
         -------
         A tuple of HTTP status number and response body.
         """
+        path = urllib.parse.quote(path)
+
         try:
             conn = HTTPConnection(
                 host=self.host,
