@@ -103,18 +103,18 @@ class DAO():
         self.connection.commit()
         cursor.close()
 
+if __name__ == "__main__":
+    dao = DAO()
+    dao.connect_to_database()
+    dao.drop_tables()
+    dao.create_tables()
+    dao.add_user('paj', 'Paul', 'Johnston', '123')
+    dao.add_campus('Provo', 'Utah', 'BYU-Provo')
 
-dao = DAO()
-dao.connect_to_database()
-dao.drop_tables()
-dao.create_tables()
-dao.add_user('paj', 'Paul', 'Johnston', '123')
-dao.add_campus('Provo', 'Utah', 'BYU-Provo')
+    myDF = pd.read_csv("Building_Coordinates.csv", sep=',')
+    # print(myDF)
 
-myDF = pd.read_csv("../Building_Coordinates.csv", sep=',')
-# print(myDF)
+    for i in range(0, len(myDF.index)):
+        dao.addBuilding(myDF['Name'][i], myDF['Latitude'][i], myDF['Longitude'][i], 0)
 
-for i in range(0, len(myDF.index)):
-    dao.add_building(myDF['Name'][i], float(myDF['Latitude'][i]), float(myDF['Longitude'][i]), 1)
-
-dao.disconnect_from_database()
+    dao.disconnect_from_database()

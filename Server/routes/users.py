@@ -22,6 +22,8 @@ class UsersRoute(Route):
 
         username = body["username"]
         password = body["password"]
+        first_name = body["firstName"]
+        last_name = body["lastName"]
 
         # TODO: use the DAO to actually create a new user if possible
         user_id = "123"
