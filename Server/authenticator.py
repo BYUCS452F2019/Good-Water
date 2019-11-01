@@ -13,11 +13,14 @@ class Authenticator:
         self.dao = dao
 
     def create_token(self, username: str, password: str) -> Optional[str]:
-        # TODO: use self.dao to check the username and password against the DB
-        # this should return NONE if the username/pass combo does not exist
-        # this should also look up the user ID
-        # for now this just uses "abc" for the user ID
-        user_id = "abc"
+        user_id = self.dao.login_user(
+            user_name=username,
+            password=password,
+        )
+
+        if user_id is None:
+            return None
+
         token = f"{random.randint(0, 0xFFFFFFFFFFFFFFFF):016x}"
 
         while token in self.token_map:
@@ -26,7 +29,7 @@ class Authenticator:
         self.token_map[token] = user_id
         return token
 
-    def lookup_token(self, token: Optional[str]) -> Optional[str]:
+    def lookup_token(self, token: Optional[str]) -> Optional[int]:
         if token in self.token_map:
             return self.token_map[token]
         else:

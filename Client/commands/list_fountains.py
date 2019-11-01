@@ -6,11 +6,8 @@ from context import ClientContext
 
 def print_fountains(data: List[Dict[str, Any]]):
     for fountain in data:
-        building_name = fountain["building"]
-        fountain_id = fountain["id"]
-        print(f"building: {building_name}")
-        print(f"id: {fountain_id}")
-        print()
+        fountain_name = fountain["name"]
+        print(f"name: {fountain_name}")
 
 
 class ListFountainsCommand(CommandHandler):

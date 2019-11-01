@@ -20,17 +20,15 @@ class ListBuildingsRoute(Route):
         if method != "GET":
             return 400, {"error": "invalid method"}
 
+        buildings = self.context.dao.list_buildings()
+
         return 200, {
             "buildings": [
                 {
-                    "name": "JFSB",
-                    "latitude": 1,
-                    "longitude": 2,
-                },
-                {
-                    "name": "TMCB",
-                    "latitude": 3,
-                    "longitude": 4,
-                },
+                    "id": b["id"],
+                    "name": b["name"],
+                    "latitude": b["latitude"],
+                    "longitude": b["longitude"],
+                } for b in buildings
             ],
         }

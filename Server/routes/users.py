@@ -25,9 +25,13 @@ class UsersRoute(Route):
         first_name = body["firstName"]
         last_name = body["lastName"]
 
-        # TODO: use the DAO to actually create a new user if possible
-        user_id = "123"
+        # TODO handle errors/user already existing
 
-        return 200, {
-            "user_id": user_id,
-        }
+        self.context.dao.add_user(
+            user_name=username,
+            first_name=first_name,
+            last_name=last_name,
+            password=password,
+        )
+
+        return 200, {}

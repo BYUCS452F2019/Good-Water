@@ -1,0 +1,3 @@
+SELECT AVG(Score) AS Score FROM rating
+    GROUP BY FountainID
+    HAVING FountainID = %(fountain_id)s;

@@ -1,0 +1,3 @@
+SELECT FountainID, FountainName FROM fountain
+    JOIN building ON fountain.BuildingID = building.BuildingID
+    WHERE building.BuildingName = %(building_name)s;

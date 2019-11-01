@@ -1,0 +1,1 @@
+SELECT BuildingID, BuildingName, Latitude, Longitude FROM building;

@@ -1,0 +1,2 @@
+SELECT FountainID, FountainName FROM fountain
+    WHERE FountainName = %(fountain_name)s;

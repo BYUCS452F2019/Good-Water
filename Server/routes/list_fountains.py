@@ -21,17 +21,15 @@ class ListFountainsRoute(Route):
             return 400, {"error": "invalid method"}
 
         building_name = params["building_name"].upper()
-        # TODO: return fountains in building named `building_name`
+        fountains = self.context.dao.list_fountains(
+            building_name=building_name,
+        )
 
         return 200, {
             "fountains": [
                 {
-                    "building": building_name,
-                    "id": "fountain1",
-                },
-                {
-                    "building": building_name,
-                    "id": "fountain2",
-                },
+                    "id": f["id"],
+                    "name": f["name"],
+                } for f in fountains
             ],
         }

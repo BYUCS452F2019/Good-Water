@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Dict, Optional, Tuple
 
 from context import ServerContext
@@ -13,15 +14,22 @@ class RatingsRoute(Route):
     def get_rating(
             self,
             fountain_name: str,
+            fountain_id: int,
     ) -> Tuple[int, Dict[str, Any]]:
+        value = self.context.dao.get_average_rating(
+            fountain_id=fountain_id,
+        )
+
         return 200, {
-            "fountain": fountain_name,
-            "averageValue": 3.5,
+            "fountainID": fountain_id,
+            "fountainName": fountain_name,
+            "averageValue": float(value) if value is not None else None,
         }
 
     def create_rating(
             self,
             fountain_name: str,
+            fountain_id: int,
             rating: Dict[str, Any],
             token: Optional[str],
     ) -> Tuple[int, Dict[str, Any]]:
@@ -39,7 +47,12 @@ class RatingsRoute(Route):
 
         print(f"Adding rating {value} to fountain {fountain_name}")
 
-        # TODO: add the rating
+        self.context.dao.add_rating(
+            score=value,
+            dateT=datetime.utcnow().isoformat(),
+            fountain_id=fountain_id,
+            user_id=user_id,
+        )
 
         return 200, {}
 
@@ -51,14 +64,20 @@ class RatingsRoute(Route):
             params: Dict[str, str],
     ) -> Tuple[int, Dict[str, Any]]:
         fountain_name = params["fountain_name"]
+        fountain = self.context.dao.lookup_fountain(
+            fountain_name=fountain_name,
+        )
+        fountain_id = fountain["id"]
 
         if method == "GET":
             return self.get_rating(
                 fountain_name=fountain_name,
+                fountain_id=fountain_id,
             )
         elif method == "POST":
             return self.create_rating(
                 fountain_name=fountain_name,
+                fountain_id=fountain_id,
                 rating=body["rating"],
                 token=params["auth_token"],
             )

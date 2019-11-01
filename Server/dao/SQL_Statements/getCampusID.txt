@@ -1,0 +1,2 @@
+
+SELECT CampusID FROM campus WHERE CampusName = %(campus_name)s;
