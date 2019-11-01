@@ -102,6 +102,13 @@ class DAO():
         self.connection.commit()
         cursor.close()
 
+if __name__ == "__main__":
+    dao = DAO()
+    dao.connect_to_database()
+    dao.drop_tables()
+    dao.create_tables()
+    dao.add_user('paj', 'Paul', 'Johnston', '123')
+    dao.add_campus('Provo', 'Utah', 'BYU-Provo')
 
 def load_server():
     dao = DAO()
