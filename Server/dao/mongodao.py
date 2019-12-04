@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Optional
 
 from pymongo import MongoClient
@@ -61,7 +62,7 @@ class MongoDAO:
             self,
             user_name: str,
             password: str,
-    ) -> Optional[Any]:
+    ) -> Optional[str]:
         """
         Returns the user id if the username, password combination are correct;
         returns None otherwise.
@@ -77,4 +78,67 @@ class MongoDAO:
         if user["Password"] != password:
             return None
 
-        return user["_id"]
+        return str(user["_id"])
+
+    def add_rating(
+            self,
+            score: int,
+            timestamp: datetime,
+            fountain_id: str,
+            user_id: int,
+    ):
+        raise NotImplementedError()
+
+    def get_average_rating(
+            self,
+            fountain_id: str,
+    ) -> Optional[float]:
+        raise NotImplementedError()
+
+    def add_fountain(
+            self,
+            building_id: str,
+            fountain_name: str,
+    ):
+        raise NotImplementedError()
+
+    def lookup_fountain(
+            self,
+            fountain_name: str,
+    ) -> Optional[Dict[str, Any]]:
+        raise NotImplementedError()
+
+    def add_building(
+            self,
+            building_name: str,
+            latitude: float,
+            longitude: float,
+            campus_id: str,
+    ):
+        raise NotImplementedError()
+
+    def add_campus(
+            self,
+            city: str,
+            state: str,
+            campus_name: str,
+    ):
+        raise NotImplementedError()
+
+    def get_campus_id(
+            self,
+            campus_name: str
+    ) -> Optional[str]:
+        raise NotImplementedError()
+
+    def list_fountains(
+            self,
+            building_name: str,
+    ) -> List[Dict[str, Any]]:
+        raise NotImplementedError()
+
+    def list_buildings(
+            self,
+            campus_name: str,
+    ) -> List[Dict[str, Any]]:
+        raise NotImplementedError()
