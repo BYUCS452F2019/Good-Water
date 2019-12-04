@@ -1,15 +1,15 @@
 from authenticator import Authenticator
-from dao.dao import DAO
+from dao.basedao import BaseDAO
 
 
 class ServerContext:
     authenticator: Authenticator
-    dao: DAO
+    dao: BaseDAO
 
     def __init__(
             self,
             authenticator: Authenticator,
-            dao: DAO,
+            dao: BaseDAO,
     ):
         self.dao = dao
         self.authenticator = authenticator

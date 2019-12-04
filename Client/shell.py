@@ -7,6 +7,7 @@ from communicator import Communicator
 from commands.get_rating import GetRatingCommand
 from commands.handler import CommandHandler
 from commands.list_buildings import ListBuildingsCommand
+from commands.list_campuses import ListCampusesCommand
 from commands.list_fountains import ListFountainsCommand
 from commands.login import LoginCommand
 from commands.new_user import NewUserCommand
@@ -32,6 +33,7 @@ class Shell:
         handler_list: List[CommandHandler] = [
             GetRatingCommand(self.context),
             ListBuildingsCommand(self.context),
+            ListCampusesCommand(self.context),
             ListFountainsCommand(self.context),
             LoginCommand(self.context),
             NewUserCommand(self.context),

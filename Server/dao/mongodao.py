@@ -57,6 +57,7 @@ class MongoDAO(BaseDAO):
         fountains.create_index("name", unique=True)
         fountains.create_index("buildingID")
         buildings.create_index("name", unique=True)
+        buildings.create_index("campusID")
         campuses.create_index("name", unique=True)
 
     def add_user(
@@ -103,7 +104,7 @@ class MongoDAO(BaseDAO):
         if user is None:
             return None
 
-        if user["Password"] != password:
+        if user["password"] != password:
             return None
 
         return str(user["_id"])
@@ -191,7 +192,7 @@ class MongoDAO(BaseDAO):
             "name": building_name,
             "latitude": latitude,
             "longitude": longitude,
-            "campus_id": ObjectId(campus_id),
+            "campusID": ObjectId(campus_id),
         })
 
     def get_building_id(
@@ -277,4 +278,18 @@ class MongoDAO(BaseDAO):
                 "longitude": b["longitude"],
             }
             for b in building_docs
+        ]
+
+    def list_campuses(self) -> List[Dict[str, Any]]:
+        campuses: Collection = self.db.campuses
+        campus_docs = campuses.find({})
+
+        return [
+            {
+                "id": str(c["_id"]),
+                "name": c["name"],
+                "city": c["city"],
+                "state": c["state"],
+            }
+            for c in campus_docs
         ]

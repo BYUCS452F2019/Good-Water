@@ -4,7 +4,7 @@ from context import ServerContext
 from routes.route import Route
 
 
-class ListBuildingsRoute(Route):
+class ListCampusesRoute(Route):
     context: ServerContext
 
     def __init__(self, context: ServerContext):
@@ -20,18 +20,15 @@ class ListBuildingsRoute(Route):
         if method != "GET":
             return 400, {"error": "invalid method"}
 
-        campus_name = params["campus_name"]
-        buildings = self.context.dao.list_buildings(
-            campus_name=campus_name,
-        )
+        campuses = self.context.dao.list_campuses()
 
         return 200, {
-            "buildings": [
+            "campuses": [
                 {
-                    "id": b["id"],
-                    "name": b["name"],
-                    "latitude": b["latitude"],
-                    "longitude": b["longitude"],
-                } for b in buildings
+                    "id": c["id"],
+                    "name": c["name"],
+                    "city": c["city"],
+                    "state": c["state"],
+                } for c in campuses
             ],
         }

@@ -124,3 +124,7 @@ class BaseDAO(ABC):
             campus_name: str,
     ) -> List[Dict[str, Any]]:
         pass
+
+    @abstractmethod
+    def list_campuses(self) -> List[Dict[str, Any]]:
+        pass

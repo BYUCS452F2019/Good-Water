@@ -5,14 +5,16 @@ import traceback
 import urllib.parse
 
 from authenticator import Authenticator
-from dao.dao import DAO
+from dao.mongodao import MongoDAO
 from context import ServerContext
 from routes.list_buildings import ListBuildingsRoute
+from routes.list_campuses import ListCampusesRoute
 from routes.list_fountains import ListFountainsRoute
 from routes.login import LoginRoute
 from routes.ratings import RatingsRoute
 from routes.router import Router
 from routes.users import UsersRoute
+from utils import relative
 
 PORT = 8080
 
@@ -72,9 +74,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self._handle("DELETE")
 
 
+def create_dao() -> MongoDAO:
+    config = json.load(
+        open(relative(__file__, "config/mongoconfig.json")),
+    )
+    return MongoDAO(
+        host=config["host"],
+        port=config["port"],
+        db_name=config["dbName"],
+    )
+
+
 def main():
     global router
-    dao = DAO()
+    dao = create_dao()
     authenticator = Authenticator(
         dao=dao,
     )
@@ -93,10 +106,15 @@ def main():
 
     router = Router({
         "buildings": Router({
-            "": ListBuildingsRoute(context),
             "<building_name>": Router({
                 "fountains": ListFountainsRoute(context),
             }),
+        }),
+        "campuses": Router({
+            "": ListCampusesRoute(context),
+            "<campus_name>": Router({
+                "buildings": ListBuildingsRoute(context),
+            })
         }),
         "fountains": Router({
             "<fountain_name>": Router({
@@ -114,10 +132,6 @@ def main():
             httpd.serve_forever()
         finally:
             dao.disconnect_from_database()
-
-        # This class is responsible for making API endpoints that
-        # will receive JSON objects and then call DAO methods such as "addUser"
-        # "addBuildling" etc.
 
 
 if __name__ == "__main__":

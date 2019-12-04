@@ -27,6 +27,6 @@ class GetRatingCommand(CommandHandler):
 
         if 200 <= status < 300:
             value = data["averageValue"]
-            print(f"Average rating: {value}")
+            print(f"Average rating: {value}/10")
         else:
             print(f"Failed to retrieve ratings: {data['error']}.")

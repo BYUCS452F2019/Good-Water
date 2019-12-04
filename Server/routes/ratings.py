@@ -40,7 +40,7 @@ class RatingsRoute(Route):
 
         value = rating["value"]
 
-        if not 0.0 <= value <= 5.0:
+        if not 0 <= value <= 10:
             return 400, {
                 "error": f"Invalid rating {value}",
             }
@@ -49,7 +49,7 @@ class RatingsRoute(Route):
 
         self.context.dao.add_rating(
             score=value,
-            dateT=datetime.utcnow().isoformat(),
+            timestamp=datetime.utcnow(),
             fountain_id=fountain_id,
             user_id=user_id,
         )

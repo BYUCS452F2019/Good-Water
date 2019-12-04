@@ -21,17 +21,19 @@ class ListBuildingsCommand(CommandHandler):
         self.context = context
         self.command_name = "listbuildings"
         self.help_text = """
-            Usage: 'listbuildings'
+            Usage: 'listbuildings CAMPUSNAME'
             Displays all available buildings.
         """
 
     def run(self, argv: List[str]):
-        if len(argv) != 1:
-            print(f"{self.command_name} should have 0 arguments.")
+        if len(argv) != 2:
+            print(f"{self.command_name} should have 1 argument.")
             return
 
+        campus_name = argv[1]
+
         status, data = self.context.communicator.send_request(
-            path="/buildings",
+            path=f"/campuses/{campus_name}/buildings",
             method="GET",
         )
 
