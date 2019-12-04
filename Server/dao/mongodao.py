@@ -7,6 +7,7 @@ from pymongo.database import Collection, Database
 
 from dao.basedao import BaseDAO
 
+
 class MongoDAO(BaseDAO):
     host: str
     port: int
@@ -98,13 +99,40 @@ class MongoDAO(BaseDAO):
             fountain_id: str,
             user_id: str,
     ):
-        raise NotImplementedError()
+        fountains: Collection = self.db.fountains
+        fountains.update_one(
+            {"_id": ObjectId(fountain_id)},
+            {
+                "$push": {
+                    "ratings": {
+                        "score": score,
+                        "timestamp": timestamp,
+                        "user_id": ObjectId(user_id),
+                    },
+                },
+            },
+        )
 
     def get_average_rating(
             self,
             fountain_id: str,
     ) -> Optional[float]:
-        raise NotImplementedError()
+        fountains: Collection = self.db.fountains
+
+        aggregation = fountains.aggregate([
+            {"$match": {"_id": ObjectId(fountain_id)}},
+            {"$project": {
+                "score": {"$avg": "$ratings.score"},
+            }},
+        ])
+
+        results = list(aggregation)
+        assert len(results) <= 1
+
+        if len(results) == 0:
+            return None
+
+        return results[0]["score"]
 
     def add_fountain(
             self,
@@ -115,6 +143,7 @@ class MongoDAO(BaseDAO):
         fountains.insert_one({
             "name": fountain_name,
             "buildingID": ObjectId(building_id),
+            "ratings": [],
         })
 
     def lookup_fountain(
