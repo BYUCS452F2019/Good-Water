@@ -1,3 +1,5 @@
+from typing import Any, Optional
+
 from pymongo import MongoClient
 from pymongo.database import Collection, Database
 
@@ -25,12 +27,21 @@ class MongoDAO:
     def drop_tables(self):
         self.client.drop_database(self.db_name)
         self.db = self.client[self.db_name]
-    
+
     def create_tables(self):
         users: Collection = self.db.users
         users.create_index("UserName", unique=True)
 
-    def add_user(self, user_name: str, first_name: str, last_name: str, password: str):
+    def add_user(
+        self,
+        user_name: str,
+        first_name: str,
+        last_name: str,
+        password: str,
+    ):
+        """
+        Creates a user with the given attributes.
+        """
         users: Collection = self.db.users
         users.insert_one({
             "UserName": user_name,
@@ -39,3 +50,24 @@ class MongoDAO:
             "Password": password,
         })
 
+    def login_user(
+            self,
+            user_name: str,
+            password: str,
+    ) -> Optional[Any]:
+        """
+        Returns the user id if the username, password combination are correct;
+        returns None otherwise.
+        """
+        users: Collection = self.db.users
+        user = users.find_one({
+            "UserName": user_name
+        })
+
+        if user is None:
+            return None
+
+        if user["Password"] != password:
+            return None
+
+        return user["_id"]
