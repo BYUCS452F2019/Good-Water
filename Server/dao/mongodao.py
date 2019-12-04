@@ -30,7 +30,14 @@ class MongoDAO:
 
     def create_tables(self):
         users: Collection = self.db.users
+        fountains: Collection = self.db.fountains
+        buildings: Collection = self.db.buildings
+        campuses: Collection = self.db.campuses
+
         users.create_index("UserName", unique=True)
+        fountains.create_index("Name", unique=True)
+        buildings.create_index("Name", unique=True)
+        campuses.create_index("Name", unique=True)
 
     def add_user(
         self,
