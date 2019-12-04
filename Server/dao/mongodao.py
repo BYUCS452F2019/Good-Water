@@ -1,12 +1,13 @@
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from bson import ObjectId
 from pymongo import MongoClient
 from pymongo.database import Collection, Database
 
+from dao.basedao import BaseDAO
 
-class MongoDAO:
+class MongoDAO(BaseDAO):
     host: str
     port: int
     db_name: str
@@ -95,7 +96,7 @@ class MongoDAO:
             score: int,
             timestamp: datetime,
             fountain_id: str,
-            user_id: int,
+            user_id: str,
     ):
         raise NotImplementedError()
 
