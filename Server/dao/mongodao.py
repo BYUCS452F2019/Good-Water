@@ -21,6 +21,9 @@ class MongoDAO(BaseDAO):
         self.port = port
         self.db_name = db_name
 
+        self.client = None
+        self.db = None
+
     def _get_document_id(
             self,
             collection: Collection,
@@ -35,6 +38,10 @@ class MongoDAO(BaseDAO):
             port=self.port,
         )
         self.db = self.client[self.db_name]
+
+    def disconnect_from_database(self):
+        self.client = None
+        self.db = None
 
     def drop_tables(self):
         self.client.drop_database(self.db_name)
@@ -69,6 +76,15 @@ class MongoDAO(BaseDAO):
             "lastName": last_name,
             "password": password,
         })
+
+    def get_user_id(
+            self,
+            user_name: str,
+    ) -> Optional[str]:
+        return self._get_document_id(
+            self.db.users,
+            {"userName": user_name},
+        )
 
     def login_user(
             self,
@@ -158,7 +174,10 @@ class MongoDAO(BaseDAO):
         if fountain is None:
             return None
 
-        return str(fountain["_id"])
+        return {
+            "id": str(fountain["_id"]),
+            "name": fountain["name"],
+        }
 
     def add_building(
             self,
@@ -174,6 +193,15 @@ class MongoDAO(BaseDAO):
             "longitude": longitude,
             "campus_id": ObjectId(campus_id),
         })
+
+    def get_building_id(
+            self,
+            building_name: str,
+    ) -> Optional[str]:
+        return self._get_document_id(
+            self.db.buildings,
+            {"name": building_name},
+        )
 
     def add_campus(
             self,

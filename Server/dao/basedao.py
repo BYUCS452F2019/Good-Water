@@ -9,6 +9,10 @@ class BaseDAO(ABC):
         pass
 
     @abstractmethod
+    def disconnect_from_database(self):
+        pass
+
+    @abstractmethod
     def drop_tables(self):
         pass
 
@@ -18,12 +22,19 @@ class BaseDAO(ABC):
 
     @abstractmethod
     def add_user(
-        self,
-        user_name: str,
-        first_name: str,
-        last_name: str,
-        password: str,
+            self,
+            user_name: str,
+            first_name: str,
+            last_name: str,
+            password: str,
     ):
+        pass
+
+    @abstractmethod
+    def get_user_id(
+            self,
+            user_name: str,
+    ) -> Optional[str]:
         pass
 
     @abstractmethod
@@ -55,6 +66,7 @@ class BaseDAO(ABC):
     @abstractmethod
     def add_fountain(
             self,
+            building_id: str,
             fountain_name: str,
     ):
         pass
@@ -74,6 +86,13 @@ class BaseDAO(ABC):
             longitude: float,
             campus_id: str,
     ):
+        pass
+
+    @abstractmethod
+    def get_building_id(
+            self,
+            building_name: str,
+    ) -> Optional[str]:
         pass
 
     @abstractmethod
