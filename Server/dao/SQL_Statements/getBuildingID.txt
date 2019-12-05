@@ -1,0 +1,2 @@
+
+SELECT BuildingID FROM building WHERE BuildingName = %(building_name)s;

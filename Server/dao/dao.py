@@ -1,9 +1,10 @@
 import json
 import os
-from typing import Any, Dict, List, Optional
-
 import mysql.connector as mysql
 import pandas as pd
+
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 
 def relative(path: str) -> str:
@@ -77,13 +78,13 @@ class DAO():
         cursor.close()
         return user_id
 
-    def add_rating(self, score: int, dateT: str, fountain_id: int, user_id: int):
+    def add_rating(self, score: int, timestamp: datetime, fountain_id: str, user_id: str):
         cursor = self.connection.cursor()
         add_rating = open(relative("SQL_Statements/addRating.txt")).read()
 
         rating_info = {
             'score': score,
-            'dateT': dateT,
+            'dateT': timestamp,
             'fountain_id': fountain_id,
             'user_id': user_id
         }
@@ -198,6 +199,39 @@ class DAO():
         cursor.close()
         return ids[0][0]
 
+    def get_building_id(self, building_name: str) -> Optional[str]:
+        cursor = self.connection.cursor()
+
+        get_building_id = open(relative("SQL_Statements/getBuildingID.txt")).read()
+
+        building_info = {
+            'building_name': building_name
+        }
+
+        cursor.execute(get_building_id, building_info)
+
+        ids = list(cursor)
+        self.connection.commit()
+        cursor.close()
+
+        return ids[0][0]
+
+    def get_user_id(self, user_name: str) -> Optional[str]:
+        cursor = self.connection.cursor()
+
+        get_user_id = open(relative("SQL_Statements/getUserID.txt")).read()
+
+        user_info = {
+            'user_name': user_name
+        }
+
+        cursor.execute(get_user_id, user_info)
+
+        ids = list(cursor)
+        self.connection.commit()
+        cursor.close()
+        return ids[0][0]
+
     def list_fountains(self, building_name: str) -> List[Dict[str, Any]]:
         cursor = self.connection.cursor()
         list_fountains = open(
@@ -223,13 +257,18 @@ class DAO():
         cursor.close()
         return fountains
 
-    def list_buildings(self) -> List[Dict[str, Any]]:
+    def list_buildings(self, campus_name: str) -> List[Dict[str, Any]]:
         cursor = self.connection.cursor()
+
         list_buildings = open(
             relative("SQL_Statements/listBuildings.txt"),
         ).read()
 
-        cursor.execute(list_buildings, {})
+        list_buildings_info = {
+            "campus_id": self.get_campus_id(campus_name)
+        }
+
+        cursor.execute(list_buildings, list_buildings_info)
         results = list(cursor)
 
         buildings = []
@@ -250,6 +289,34 @@ class DAO():
         self.connection.commit()
         cursor.close()
         return buildings
+
+    def list_campuses(self) -> List[Dict[str, Any]]:
+        cursor = self.connection.cursor()
+        list_campuses = open(
+            relative("SQL_Statements/listCampuses.txt"),
+        ).read()
+
+        cursor.execute(list_campuses, {})
+        results = list(cursor)
+
+        campuses = []
+
+        for (
+            campus_id,
+            campus_name,
+            city,
+            state,
+        ) in results:
+            campuses.append({
+                "id": campus_id,
+                "name": campus_name,
+                "city": city,
+                "state": state,
+            })
+
+        self.connection.commit()
+        cursor.close()
+        return campuses
 
 
 def load_server():

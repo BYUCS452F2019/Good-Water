@@ -3,9 +3,12 @@ import json
 import socketserver
 import traceback
 import urllib.parse
+import sys
 
 from authenticator import Authenticator
 from dao.mongodao import MongoDAO
+from dao.dao import DAO
+from dao.basedao import BaseDAO
 from context import ServerContext
 from routes.list_buildings import ListBuildingsRoute
 from routes.list_campuses import ListCampusesRoute
@@ -74,20 +77,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self._handle("DELETE")
 
 
-def create_dao() -> MongoDAO:
-    config = json.load(
-        open(relative(__file__, "config/mongoconfig.json")),
-    )
-    return MongoDAO(
-        host=config["host"],
-        port=config["port"],
-        db_name=config["dbName"],
-    )
+def create_dao(db: str) -> BaseDAO:
+    if db == 'mongo':
+        config = json.load(
+            open(relative(__file__, "config/mongoconfig.json")),
+        )
+        return MongoDAO(
+            host=config["host"],
+            port=config["port"],
+            db_name=config["dbName"],
+        )
+    elif db == 'mysql':
+        return DAO()
 
 
-def main():
+def main(db: str):
     global router
-    dao = create_dao()
+    
+    dao = create_dao(db)
+
     authenticator = Authenticator(
         dao=dao,
     )
@@ -135,4 +143,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(*sys.argv[1:])

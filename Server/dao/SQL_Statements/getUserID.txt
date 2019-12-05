@@ -1,0 +1,2 @@
+
+SELECT UserID FROM user WHERE UserName = %(user_name)s;

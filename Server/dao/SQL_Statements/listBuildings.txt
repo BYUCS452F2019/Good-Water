@@ -1,1 +1,1 @@
-SELECT BuildingID, BuildingName, Latitude, Longitude FROM building;
+SELECT BuildingID, BuildingName, Latitude, Longitude FROM building WHERE CampusID = %(campus_id)s;

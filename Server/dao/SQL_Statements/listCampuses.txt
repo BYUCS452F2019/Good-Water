@@ -1,0 +1,1 @@
+SELECT CampusID, CampusName, City, State FROM campus;
