@@ -77,6 +77,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self._handle("DELETE")
 
 
+
 def create_dao(db: str) -> BaseDAO:
     if db == 'mongo':
         config = json.load(
@@ -93,7 +94,7 @@ def create_dao(db: str) -> BaseDAO:
 
 def main(db: str):
     global router
-    
+
     dao = create_dao(db)
 
     authenticator = Authenticator(
