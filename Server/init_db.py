@@ -11,25 +11,85 @@ def init_db(dao: BaseDAO):
     dao.add_user("paj", "Paul", "Johnston", "123")
     user_names = ["paj"]
     dao.add_campus("Provo", "Utah", "BYU-Provo")
-    campus_id = dao.get_campus_id("BYU-Provo")
-
+    dao.add_campus("Rexburg", "Idaho", "BYU-Idaho")
+    dao.add_campus("Laie", "Hawaii", "BYU-Hawaii")
+    dao.add_campus("SLC", "Utah", "BYU-SLC")
+    campus_idProvo = dao.get_campus_id("BYU-Provo")
+    campus_idRexburg = dao.get_campus_id("BYU-Idaho")
+    campus_idLaie = dao.get_campus_id("BYU-Hawaii")
+    campus_idSLC = dao.get_campus_id("BYU-SLC")
+    building_names = []
+    # Provo Campus
     myDF = pd.read_csv(
         relative(__file__, "Building_Coordinates.csv"),
         sep=",",
     )
 
-    building_names = []
+
+
 
     for i in range(0, len(myDF.index)):
         dao.add_building(
             myDF["Name"][i],
             float(myDF["Latitude"][i]),
             float(myDF["Longitude"][i]),
-            campus_id,
+            campus_idProvo,
         )
 
         building_names.append(myDF["Name"][i])
 
+    # Rexburg Campus
+    myDF = pd.read_csv(
+        relative(__file__, "Buildings_Rexburg.csv"),
+        sep=",",
+    )
+
+
+    for i in range(0, len(myDF.index)):
+        dao.add_building(
+            myDF["Name"][i],
+            float(myDF["Latitude"][i]),
+            float(myDF["Longitude"][i]),
+            campus_idRexburg,
+        )
+
+        building_names.append(myDF["Name"][i])
+
+    # Laie Campus
+    myDF = pd.read_csv(
+        relative(__file__, "Buildings_Laie.csv"),
+        sep=",",
+    )
+
+    for i in range(0, len(myDF.index)):
+        dao.add_building(
+            myDF["Name"][i],
+            float(myDF["Latitude"][i]),
+            float(myDF["Longitude"][i]),
+            campus_idLaie,
+        )
+
+        building_names.append(myDF["Name"][i])
+
+
+    # SLC Campus
+    myDF = pd.read_csv(
+        relative(__file__, "Buildings_SLC.csv"),
+        sep=",",
+    )
+
+    for i in range(0, len(myDF.index)):
+        dao.add_building(
+            myDF["Name"][i],
+            float(myDF["Latitude"][i]),
+            float(myDF["Longitude"][i]),
+            campus_idSLC,
+        )
+
+        building_names.append(myDF["Name"][i])
+
+
+    # Fountains
     fountainData = pd.read_csv(
         relative(__file__, "FountainInput.csv"),
         sep=",",
